@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "connection": "default",
+  "collectionName": "rooms",
+  "info": {
+    "name": "room"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "identifiant": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "users": {
+      "plugin": "users-permissions",
+      "collection": "user"
+    }
+  }
+}
