@@ -1,9 +1,29 @@
 import React, { useReducer } from 'react';
-import { List } from "immutable";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from 'react-router-dom';
+import { List } from 'immutable';
+
 import './App.css';
 import Map from './components/Map';
 import Deck from './components/Deck';
 import Card from './models/Card';
+import CreateRoom from './components/CreateRoom';
+
+const Home = (props) => {
+  return (
+    <div>
+      <Link to='/create'>Create a game</Link>
+      <form>
+        <input placeholder="Entrez le nom de la room" />
+        <button>Join</button>
+      </form>
+    </div>
+  );
+}
 
 const weaponsDeck: List<Card> = List([
   new Card({
@@ -41,18 +61,23 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <Deck
-          cards={ state.weapons }
-          onDraw={ drawWeapon }
-        />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </header>
-      <div className="map-container">
-        <Map lines={7} cols={6} />
-      </div>
+      <Router>
+        <header className="App-header">
+          <Route exact path='/'>
+            <Home />
+          </Route>
+          <Route exact path='/create'>
+            <CreateRoom />
+          </Route>
+          {/* <Deck
+            cards={ state.weapons }
+            onDraw={ drawWeapon }
+          /> */}
+        </header>
+        <div className="map-container">
+          <Map lines={7} cols={6} />
+        </div>
+      </Router>
     </div>
   );
 }
