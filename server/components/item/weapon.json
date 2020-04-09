@@ -1,0 +1,14 @@
+{
+  "connection": "default",
+  "collectionName": "components_item_weapons",
+  "info": {
+    "name": "weapon",
+    "icon": "allergies"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    }
+  }
+}

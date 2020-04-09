@@ -9,11 +9,11 @@ import { List } from 'immutable';
 
 import './App.css';
 import Map from './components/Map';
-import Deck from './components/Deck';
 import Card from './models/Card';
 import CreateRoom from './components/CreateRoom';
+import Room from './components/Room';
 
-const Home = (props) => {
+const Home = () => {
   return (
     <div>
       <Link to='/create'>Create a game</Link>
@@ -32,7 +32,7 @@ const weaponsDeck: List<Card> = List([
   new Card({
     name: 'Poële'
   })
-])
+]);
 
 function App() {
   const [state, dispatch] = useReducer(
@@ -62,24 +62,34 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <header className="App-header">
-          <Route exact path='/'>
-            <Home />
+        <Switch>
+          <Route path='/room/:id'>
+            <Room />
           </Route>
-          <Route exact path='/create'>
-            <CreateRoom />
+          <Route path='/'>
+            <header className="App-header">
+              <Route exact path='/'>
+                <Home />
+              </Route>
+              <Route exact path='/create'>
+                <CreateRoom />
+              </Route>
+            </header>
+            <div className="map-container">
+              <Map lines={7} cols={6} />
+            </div>
           </Route>
-          {/* <Deck
-            cards={ state.weapons }
-            onDraw={ drawWeapon }
-          /> */}
-        </header>
-        <div className="map-container">
-          <Map lines={7} cols={6} />
-        </div>
+        </Switch>
       </Router>
     </div>
   );
 }
 
 export default App;
+
+/* <Route exact path='/room/:id'>
+<Deck
+  cards={ state.weapons }
+  onDraw={ drawWeapon }
+/>
+</Route> */

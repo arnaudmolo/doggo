@@ -2,56 +2,56 @@
   "routes": [
     {
       "method": "GET",
-      "path": "/rooms",
-      "handler": "room.find",
+      "path": "/players",
+      "handler": "player.find",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/rooms/count",
-      "handler": "room.count",
+      "path": "/players/count",
+      "handler": "player.count",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/rooms/:id",
-      "handler": "room.findOne",
+      "path": "/players/me",
+      "handler": "player.me",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/rooms/join/:identifiant",
-      "handler": "room.join",
+      "path": "/players/:id",
+      "handler": "player.findOne",
       "config": {
         "policies": []
       }
     },
     {
       "method": "POST",
-      "path": "/rooms",
-      "handler": "room.create",
+      "path": "/players",
+      "handler": "player.create",
       "config": {
         "policies": []
       }
     },
     {
       "method": "PUT",
-      "path": "/rooms/:id",
-      "handler": "room.update",
+      "path": "/players/:id",
+      "handler": "player.update",
       "config": {
         "policies": []
       }
     },
     {
       "method": "DELETE",
-      "path": "/rooms/:id",
-      "handler": "room.delete",
+      "path": "/players/:id",
+      "handler": "player.delete",
       "config": {
         "policies": []
       }

@@ -1,5 +1,7 @@
+'use strict';
+
 /**
- * Lifecycle callbacks for the `room` model.
+ * Lifecycle callbacks for the `player` model.
  */
 
 module.exports = {
@@ -10,14 +12,11 @@ module.exports = {
   // After saving a value.
   // Fired after an `insert` or `update` query.
   afterSave: async (model, response, options) => {
-    // console.log('C bien là', model, response, options);
-    strapi
-      .io
-      .sockets
-      .in(model.attributes.identifiant)
-      .emit('message', JSON.stringify({
-        type: 'ROOM_UPDATE', payload: model
-      }));
+    // console.log('after save player', model, response, options);
+    // console.log('--'.repeat(100));
+    // console.log(this, strapi);
+    // this.
+    // strapi.io.sockets.in()
   },
 
   // Before fetching a value.

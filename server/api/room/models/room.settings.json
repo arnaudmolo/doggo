@@ -15,9 +15,11 @@
       "required": true,
       "unique": true
     },
-    "users": {
-      "plugin": "users-permissions",
-      "collection": "user"
+    "players": {
+      "collection": "player"
+    },
+    "gamemaster": {
+      "model": "player"
     }
   }
 }
