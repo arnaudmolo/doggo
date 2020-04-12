@@ -1,4 +1,4 @@
-const { sanitizeEntity } = require('strapi-utils');
+const { sanitizeEntity, parseMultipartData } = require('strapi-utils');
 
 function generateUID () {
   // I generate the UID from two parts here
@@ -16,10 +16,44 @@ function generateUID () {
  */
 
 module.exports = {
+  async findOneOrCreate (ctx, room) {
+    let player = ctx.session.player;
+    if (player) {
+      player = await strapi.services.player.findOne({id: player.id});
+    } else {
+      player = await strapi.services.player.create({
+        name: `user-${generateUID()}`,
+        room: room && room.id
+      });
+    }
+    ctx.session.player = player;
+    return player;
+  },
   async me (ctx) {
-    const player = ctx.state.session.player ? ctx.state.session.player : await strapi.services.player.create({
-      name: `user-${generateUID()}`
-    });
+    const player = await this.findOneOrCreate(ctx);
     return sanitizeEntity(player, { model: strapi.models.player });
-  }
+  },
+  async update(ctx) {
+    let player;
+    if (ctx.is('multipart')) {
+      const { data, files } = parseMultipartData(ctx);
+      player = await strapi.services.player.update(ctx.params, data, {
+        files,
+      });
+    } else {
+      player = await strapi.services.player.update(
+        ctx.params,
+        ctx.request.body
+      );
+    }
+
+    const room = await strapi.services.room.findOne({id: player.room.id});
+
+    strapi.io.sockets.in(room.identifiant).emit('message', JSON.stringify({
+      type: 'ROOM_UPDATE',
+      payload: sanitizeEntity(room, { model: strapi.models.room })
+    }));
+
+    return sanitizeEntity(player, { model: strapi.models.player });
+  },
 };

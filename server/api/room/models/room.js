@@ -5,12 +5,13 @@
 module.exports = {
   // Before saving a value.
   // Fired before an `insert` or `update` query.
-  // beforeSave: async (model, attrs, options) => {},
+  // beforeSave: async (model, attrs, options) => {
+  //   console.log(model, attrs, options);
+  // },
 
   // After saving a value.
   // Fired after an `insert` or `update` query.
   afterSave: async (model, response, options) => {
-    // console.log('C bien là', model, response, options);
     strapi
       .io
       .sockets

@@ -4,8 +4,9 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import Player from '../../models/Player';
 import Map from '../Map';
+import { usePlayer } from '../../AuthProvider';
 
-const BASE_URL = 'http://127.0.0.1:1337';
+const BASE_URL = `http://${window.location.hostname}:1337`;
 const useSocket = (url) =>
   useMemo(() => io(url), [url])
 
@@ -16,22 +17,18 @@ type Room = {
 }
 
 type State = {
-  player?: Player;
   room: Room;
 }
 
 const Room: React.SFC<{}> = props => {
 
+  const {player, loading} = usePlayer();
   const params = useParams();
   const socket = useSocket(BASE_URL);
   const [state, dispatch] = useReducer<(state: State, action: any) => State >(
     (state, action) => {
+      console.log('reducer', action);
       switch (action.type) {
-        case 'USER_LOADED':
-          return {
-            ...state,
-            player: action.payload
-          };
         case 'ROOM_UPDATE':
           return {
             ...state,
@@ -42,12 +39,12 @@ const Room: React.SFC<{}> = props => {
       }
     },
     {
-      player: undefined,
       room: undefined,
     }
   )
   
   useEffect(() => {
+    console.log('tu dois pas voir trop ce message')
     socket.on('connect', () => socket.emit('room', params.id));
     socket.on('message', (message) => dispatch(JSON.parse(message)))
     axios.get(`${BASE_URL}/rooms/join/${params.id}`, {withCredentials: true})
@@ -55,22 +52,16 @@ const Room: React.SFC<{}> = props => {
         type: 'ROOM_UPDATE',
         payload: response.data,
       }))
-    axios.get(`${BASE_URL}/players/me`, {withCredentials: true})
-      .then((response) =>
-        dispatch({
-          type: 'USER_LOADED',
-          payload: response.data,
-        })
-      )
-  }, [params.id]);
+  }, [params.id, socket]);
 
   const [editName, setEditName] = useState(false);
   const onNameDoubleClick = useCallback(event => setEditName(state => !state), []);
-  const playerId = state.player && state.player.id;
+  const playerId = player && player.id;
   const validateOnEnter = useCallback(async event => {
-    console.log(event)
     if (event.key === 'Enter') {
+      dispatch('USER_LOAD');
       const response = await axios.put(`${BASE_URL}/players/${playerId}`, {name: event.target.value}, {withCredentials: true})
+      console.log('deux fois ?');
       dispatch({
         type: 'USER_LOADED',
         payload: response.data
@@ -83,11 +74,11 @@ const Room: React.SFC<{}> = props => {
     <React.Fragment>
       <header className="App-header">
         <p>hello {
-          state.player &&
-            (editName ? <input onKeyDown={validateOnEnter} defaultValue={state.player.name} /> : <span onDoubleClick={onNameDoubleClick}>{state.player.name}</span>)
+          player &&
+            (editName ? <input disabled={ loading } onKeyDown={validateOnEnter} defaultValue={player.name} /> : <span onDoubleClick={onNameDoubleClick}>{player && player.name}</span>)
           }
         </p>
-        {(state.player && state.room && state.player.id === state.room.gamemaster.id)
+        {(player && state.room && state.room.gamemaster && player.id === state.room.gamemaster.id)
           ? <p>You are the game master</p>
           : <p>You are waiting for the game master { state.room && state.room.gamemaster && `(${state.room.gamemaster.name})`} to launch the party</p>}
         {state.room && (

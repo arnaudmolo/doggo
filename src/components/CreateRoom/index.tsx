@@ -14,8 +14,7 @@ const CreateRoom: React.SFC<{}> = props => {
     } catch (error) {
       console.log(error)
     }
-  }, [])
-  console.log(history)
+  }, [history])
   return (
     <div>
       <button onClick={ onClick }>Create a room</button>

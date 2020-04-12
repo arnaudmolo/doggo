@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Lifecycle callbacks for the `player` model.
  */
@@ -11,13 +9,8 @@ module.exports = {
 
   // After saving a value.
   // Fired after an `insert` or `update` query.
-  afterSave: async (model, response, options) => {
-    // console.log('after save player', model, response, options);
-    // console.log('--'.repeat(100));
-    // console.log(this, strapi);
-    // this.
-    // strapi.io.sockets.in()
-  },
+  // afterSave: async (model, response, options) => {
+  // },
 
   // Before fetching a value.
   // Fired before a `fetch` operation.
