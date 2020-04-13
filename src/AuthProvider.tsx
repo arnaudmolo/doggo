@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useEffect, createContext } from "react";
+import React, { useContext, useReducer, useEffect, createContext, useCallback, useMemo } from "react";
 import axios from 'axios';
 import SocketProvider from './SocketProvider';
 
@@ -11,9 +11,13 @@ export const Context = createContext<any>(null);
 type PlayerState = {
   player?: Player;
   loading: boolean;
+};
+
+interface PlayerHook extends PlayerState {
+  changeName: (name: string) => Promise<any>;
 }
 
-export const usePlayer: () => PlayerState = () => useContext(Context);
+export const usePlayer: () => PlayerHook = () => useContext(Context);
 
 const Component = ({children}) => {
   const [playerState, dispatch] = useReducer<(state: PlayerState, action: any) => PlayerState>(
@@ -47,13 +51,23 @@ const Component = ({children}) => {
           payload: response.data,
         })
       )
-  }, [])
+  }, []);
+  const playerId = playerState.player && playerState.player.id;
+  const changeName = useCallback(async (name) => {
+    dispatch('USER_LOAD');
+    const response = await axios.put(`${BASE_URL}/players/${playerId}`, {name}, {withCredentials: true});
+    dispatch({
+      type: 'USER_LOADED',
+      payload: response.data
+    });
+  }, [playerId]);
+  const value = useMemo(() => ({ ...playerState, changeName }), [playerState, changeName]);
   return (
-    <Context.Provider value={playerState}>
+    <Context.Provider value={value}>
       {children}
     </Context.Provider>
   )
-}
+};
 
 export default ({children}) => (
   <SocketProvider>
@@ -61,4 +75,4 @@ export default ({children}) => (
       {children}
     </Component>
   </SocketProvider>
-)
+);

@@ -5,6 +5,7 @@ import axios from 'axios';
 import Player from '../../models/Player';
 import Map from '../Map';
 import { usePlayer } from '../../AuthProvider';
+import { range } from 'ramda';
 
 const BASE_URL = `http://${window.location.hostname}:1337`;
 const useSocket = (url) =>
@@ -22,7 +23,7 @@ type State = {
 
 const Room: React.SFC<{}> = props => {
 
-  const {player, loading} = usePlayer();
+  const {player, loading, changeName} = usePlayer();
   const params = useParams();
   const socket = useSocket(BASE_URL);
   const [state, dispatch] = useReducer<(state: State, action: any) => State >(
@@ -56,19 +57,13 @@ const Room: React.SFC<{}> = props => {
 
   const [editName, setEditName] = useState(false);
   const onNameDoubleClick = useCallback(event => setEditName(state => !state), []);
-  const playerId = player && player.id;
+
   const validateOnEnter = useCallback(async event => {
     if (event.key === 'Enter') {
-      dispatch('USER_LOAD');
-      const response = await axios.put(`${BASE_URL}/players/${playerId}`, {name: event.target.value}, {withCredentials: true})
-      console.log('deux fois ?');
-      dispatch({
-        type: 'USER_LOADED',
-        payload: response.data
-      })
+      await changeName(event.target.value);
       setEditName(false)
     }
-  }, [playerId]);
+  }, [changeName]);
 
   return (
     <React.Fragment>
@@ -84,7 +79,9 @@ const Room: React.SFC<{}> = props => {
         {state.room && (
           <ul>
             {state.room.players.map(player => (
-              <li key={player.id}>{player.name}</li>
+              <li key={player.id}>
+                <p><span>{player.name}{range(0, 4).map(heart => heart < player.life ? '❤️' : '🖤')}</span></p>
+              </li>
             ))}
           </ul>
         )}
