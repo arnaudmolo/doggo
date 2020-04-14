@@ -46,3 +46,21 @@
 .board-point.st5 {
   fill:#010202;
 }
+.slot {
+  fill: transparent;
+  stroke: black;
+  /* stroke-width: 1; */
+}
+
+.slot-hover {
+  fill: transparent;
+  stroke: transparent;
+}
+
+.polygon-container:hover circle {
+  stroke-width: 3;
+}
+
+.point-invisible {
+  pointer-events: none;
+}

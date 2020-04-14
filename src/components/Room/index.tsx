@@ -3,7 +3,6 @@ import { useParams, useHistory } from 'react-router-dom';
 import io from 'socket.io-client';
 import axios from 'axios';
 import Player from '../../models/Player';
-import Map from '../Map';
 import { usePlayer } from '../../AuthProvider';
 import Deck from '../Deck';
 import Card from '../../models/Card';

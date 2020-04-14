@@ -10,7 +10,7 @@ type Props = {
 }
 
 export default ({onClick, card, hidden}: Props) => {
-  const onCardClick = useCallback(() => onClick(card), [onClick, card]);
+  const onCardClick = useCallback(() => onClick && onClick(card), [onClick, card]);
   if (hidden) {
     return (
       <div className="card hidden-card" onClick={onCardClick}>
