@@ -1,0 +1,48 @@
+.st0 {
+  stroke:#1D71B8;
+  fill: burlywood;
+  stroke-width: 2px;
+}
+.st1 {
+  stroke:#4EAE33;
+  fill: burlywood;
+  stroke-width: 2px;
+}
+.st2 {
+  stroke:#F6F6F6;
+  fill: burlywood;
+  stroke-width: 2px;
+}
+.st3 {
+  stroke:#FCEA10;
+  fill: burlywood;
+  stroke-width: 2px;
+}
+.st4 {
+  stroke:#BE1622;
+  fill: burlywood;
+  stroke-width: 2px;
+}
+.st5 {
+  stroke:#010202;
+  fill: burlywood;
+  stroke-width: 2px;
+}
+.board-point.st0 {
+  fill:#1D71B8;
+}
+.board-point.st1 {
+  fill:#4EAE33;
+}
+.board-point.st2 {
+  fill:#F6F6F6;
+}
+.board-point.st3 {
+  fill:#FCEA10;
+}
+.board-point.st4 {
+  fill:#BE1622;
+}
+.board-point.st5 {
+  fill:#010202;
+}

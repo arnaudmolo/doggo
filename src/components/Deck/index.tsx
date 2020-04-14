@@ -1,19 +1,31 @@
 import React from 'react';
-import Card from '../../models/Card';
-import { List } from 'immutable';
+import { take } from 'ramda';
+import CardType from '../../models/Card';
+
+import Card from '../Card';
+import './styles.css';
 
 const Deck: React.SFC<{
-  cards: List<Card>;
-  onDraw: (card: Card) => any;
+  cards: CardType[];
+  onDraw?: (card: CardType) => any;
 }> = ({cards, onDraw}) => {
   return (
     <div>
-      il y à { cards.size }
-      <button
-        onClick={ React.useCallback(() => onDraw(cards.first()), [cards, onDraw]) }
-      >Tirer une carte</button>
+      il y à { cards.length } cartes
+      <ul className="deck--deck__container">
+        {
+          take(5, cards).map((card) =>
+            <li
+              key={`${card.family}-${card.value}`}
+              className="deck--card__container"
+            >
+              <Card card={card} hidden />
+            </li>
+          )
+        }
+      </ul>
     </div>
   );
-}
+};
 
-export default Deck;
+export default React.memo(Deck);

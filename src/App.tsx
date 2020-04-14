@@ -14,7 +14,7 @@ import AuthProvider, { usePlayer } from './AuthProvider';
 
 const Home = () => {
 
-  const playerState = usePlayer()
+  const playerState = usePlayer();
 
   console.log(playerState);
 

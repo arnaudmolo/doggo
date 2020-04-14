@@ -1,8 +1,8 @@
 import { Record } from 'immutable';
 
 class Card extends Record({
-  name: 'Empty Card',
-  url: './empty-card.png'
+  value: 0,
+  family: ''
 }) {
 
 }

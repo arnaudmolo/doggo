@@ -20,6 +20,14 @@
     },
     "gamemaster": {
       "model": "player"
+    },
+    "started": {
+      "type": "boolean",
+      "default": false,
+      "required": false
+    },
+    "cards": {
+      "type": "json"
     }
   }
 }

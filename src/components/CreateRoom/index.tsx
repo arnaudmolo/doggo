@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 const CreateRoom: React.SFC<{}> = props => {
-  const history = useHistory()
+  const history = useHistory();
   const onClick = React.useCallback(async () => {
     try {
       const response = await fetch('//localhost:1337/rooms/', {
