@@ -69,16 +69,19 @@ module.exports = {
           if (socket) {
             console.log('oui');
             socket.emit(
-              'UPDATE_PLAYER',
-              JSON.stringify(start)
+              'message',
+              JSON.stringify({type: 'UPDATE_PLAYER', payload: start})
             );
           }
         }
-        // Si ca plante il fautre mettre cards.hand
-        await strapi.services.player.update({
+        // Si ca plante il fautre mettre cards.value
+        return await strapi.services.player.update({
           id: player.id
         }, {
-          cards: start
+          cards: { 
+            hand: start,
+            gift: null,
+          }
         });
       }
     ));
@@ -102,10 +105,11 @@ module.exports = {
     }
     let player = await strapi.controllers.player.findOneOrCreate(ctx, room);
     if (!player.room) {
-      player = await strapi.services.player.update({id: player.id}, {room: room.id});
+      player = await strapi.services.player.update({id: player.id}, {room: room.id, cards: {hand: [], gift: null}});
     } else if (player.room.id !== room.id) {
       // TODO: remove ce load inutile en fait ptn
       const wrongRoom = await strapi.services.room.findOne({id: player.room.id});
+      player = await strapi.services.player.update({id: player.id}, {room: room.id, cards: {hand: [], gift: null}});
       await strapi.services.room.update(
         {id: wrongRoom.id},
         {

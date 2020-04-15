@@ -1,3 +1,17 @@
+.card {
+  height: 200px;
+  width: 150px;
+  border-radius: 10px;
+}
+
+.card__Pikes, .card__Clovers {
+  color: black;
+}
+
+.card__Hearts, .card__Tiles {
+  color: red;
+}
+
 .hidden-card__img {
   max-height: 300px;
 }

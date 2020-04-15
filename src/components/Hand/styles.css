@@ -1,6 +1,33 @@
-.hand-container {
+.hand-container {
+  display: flex;
+}
+
+.hand-container__card-container {
+  position: relative;
+  margin: 10px;
+}
+
+.hand-container__choice-container {
   position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translate(-50%);
+  border-radius: 10px;
+}
+
+.choice-container__button {
+  width: 150px;
+  opacity: 0.3;
+}
+
+.hand-container p {
+  padding: 0;
+  margin: 0;
+}
+
+.choice-container__button__play {
+  height: 150px;
+  background-color: cadetblue;
+}
+
+.choice-container__button__give {
+  height: 50px;
+  background-color: red;
 }

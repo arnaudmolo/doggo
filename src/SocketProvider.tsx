@@ -14,4 +14,4 @@ export default ({children}) => {
       {children}
     </Context.Provider>
   )
-}
+};

@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect, useMemo, useState, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import io from 'socket.io-client';
-import axios from 'axios';
+import axios from '../../AxiosProvider';
 import Player from '../../models/Player';
 import { usePlayer } from '../../AuthProvider';
 import Deck from '../Deck';
@@ -10,9 +10,7 @@ import Board from '../Board';
 import Hand from '../Hand';
 
 import './styles.css';
-
-const BASE_URL = `http://${window.location.hostname}:1337`;
-const useSocket = (url) => useMemo(() => io(url), [url])
+import { useSocket } from '../../SocketProvider';
 
 type Room = {
   id: number;
@@ -38,14 +36,13 @@ type State = {
 
 const Room: React.SFC<{}> = props => {
 
-  const {player, loading, changeName} = usePlayer();
+  const {player, loading, changeName, dispatch: dispatchUser} = usePlayer();
   const params = useParams();
-  const socket = useSocket(BASE_URL);
+  const socket = useSocket();
   const history = useHistory();
 
   const [state, dispatch] = useReducer<(state: State, action: any) => State >(
     (state, action) => {
-      console.log('reducer', action);
       switch (action.type) {
         case 'ROOM_UPDATE':
           return {
@@ -74,15 +71,13 @@ const Room: React.SFC<{}> = props => {
       type: 'UPDATE_ROOM',
       payload: newRoom
     });
-    const response = await axios.put(
-      `${BASE_URL}/rooms/${room.id}`,
-      newRoom,
-      {withCredentials: true}
+    await axios.put(
+      `/rooms/${room.id}`,
+      newRoom
     );
   }, [room]);
   
   useEffect(() => {
-    console.log('tu dois pas voir trop ce message')
     socket.emit('room', params.id);
     socket.on('message', (message) => {
       const json = JSON.parse(message);
@@ -91,21 +86,22 @@ const Room: React.SFC<{}> = props => {
         json.payload.pawns = JSON.parse(json.payload.pawns);
       } catch (error) {
         console.log('quoi jsuis ivre');
-        console.error(error);
+        console.log(json.payload)
       }
-      console.log('message', json);
+      console.log('recois un message de socket depuis la room', json);
+      dispatchUser(json);
       return dispatch(json);
-    })
-    axios.get(`${BASE_URL}/rooms/join/${params.id}`, {withCredentials: true})
+    });
+    axios.get(`/rooms/join/${params.id}`)
       .then((response: any) => dispatch({
         type: 'ROOM_UPDATE',
         payload: response.data,
       })).catch(reason => {
         console.error(reason);
-        console.log('reason', reason)
+        console.log('reason', reason);
         history.push('/');
-      })
-  }, [params.id, socket, history]);
+      });
+  }, [params.id, socket, history, dispatchUser]);
 
   const [editName, setEditName] = useState(false);
   const onNameDoubleClick = useCallback(() => setEditName(state => !state), []);
@@ -117,8 +113,8 @@ const Room: React.SFC<{}> = props => {
   }, [changeName]);
 
   const drawCards = useCallback(async () => {
-    const response = await axios.get(`${BASE_URL}/rooms/draw/${state.room.id}/6`);
-    console.log(response);
+    const response = await axios.get(`/rooms/draw/${state.room.id}/2`);
+    // console.log(response);
   }, [state.room]);
 
   return (
@@ -147,14 +143,12 @@ const Room: React.SFC<{}> = props => {
         {state.room && <Board pawns={state.room.pawns.value} setPawns={updatePawns} />}
       </div>
       <div className="room__hand-container">
-        {player && player.cards && <Hand cards={player.cards} />}
+        {state.room && player && player.cards && (
+          <Hand players={state.room.players.filter(p => p.id !== player.id)} />
+        )}
       </div>
     </React.Fragment>
   );
 }
 
 export default Room;
-
-/* <div className="map-container">
-<Map lines={7} cols={6} />
-</div> */

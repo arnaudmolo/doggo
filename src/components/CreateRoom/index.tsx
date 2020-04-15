@@ -5,7 +5,7 @@ const CreateRoom: React.SFC<{}> = props => {
   const history = useHistory();
   const onClick = React.useCallback(async () => {
     try {
-      const response = await fetch('//localhost:1337/rooms/', {
+      const response = await fetch('//127.0.0.1:1337/rooms/', {
         method: 'POST',
         mode: 'cors'
       });

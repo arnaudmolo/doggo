@@ -19,7 +19,7 @@ module.exports = () => {
       socket.join(room);
     });
     socket.on('player', async playerId => {
-      const player = await strapi.services.player.update(
+      await strapi.services.player.update(
         {id: playerId},
         {socket: socket.id}
       );
