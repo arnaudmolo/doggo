@@ -13,11 +13,14 @@
     "name": {
       "type": "string"
     },
-    "cards": {
-      "collection": "card"
-    },
     "room": {
       "model": "room"
+    },
+    "socket": {
+      "type": "uid"
+    },
+    "cards": {
+      "type": "json"
     }
   }
 }

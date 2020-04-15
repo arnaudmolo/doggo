@@ -1,0 +1,6 @@
+.room__hand-container {
+  position: absolute;
+  left: 50%;
+  transform: translate(50%);
+  bottom: 0;
+}

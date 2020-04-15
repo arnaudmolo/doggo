@@ -26,6 +26,14 @@
     },
     {
       "method": "GET",
+      "path": "/rooms/draw/:id/:nb",
+      "handler": "room.draw",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
       "path": "/rooms/join/:identifiant",
       "handler": "room.join",
       "config": {

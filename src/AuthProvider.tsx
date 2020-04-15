@@ -1,6 +1,6 @@
 import React, { useContext, useReducer, useEffect, createContext, useCallback, useMemo } from "react";
 import axios from 'axios';
-import SocketProvider from './SocketProvider';
+import SocketProvider, { useSocket } from './SocketProvider';
 
 import Player from './models/Player';
 
@@ -20,9 +20,18 @@ interface PlayerHook extends PlayerState {
 export const usePlayer: () => PlayerHook = () => useContext(Context);
 
 const Component = ({children}) => {
+  const socket = useSocket();
   const [playerState, dispatch] = useReducer<(state: PlayerState, action: any) => PlayerState>(
     (state, action) => {
+      console.log('recois bien ?', action);
       switch (action.type) {
+        case 'ROOM_UPDATE':
+          const found = action.payload.players.find(player => state.player.id === player.id)
+          console.log('on parle de toi', found);
+          return {
+            ...state,
+            player: found,
+          }
         case 'USER_LOAD':
           return {
             ...state,
@@ -62,6 +71,18 @@ const Component = ({children}) => {
     });
   }, [playerId]);
   const value = useMemo(() => ({ ...playerState, changeName }), [playerState, changeName]);
+  useEffect(() => {
+    if (playerId) {
+      socket.emit('player', playerId);
+    }
+  }, [playerId, socket]);
+  useEffect(() => {
+    socket.on('message', (message) => {
+      console.log('ha merde');
+      dispatch(JSON.stringify(message));
+    })
+  }, [playerId, socket])
+
   return (
     <Context.Provider value={value}>
       {children}

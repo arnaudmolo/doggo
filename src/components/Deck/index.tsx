@@ -8,11 +8,12 @@ import './styles.css';
 const Deck: React.SFC<{
   cards: CardType[];
   onDraw?: (card: CardType) => any;
-}> = ({cards, onDraw}) => {
+  visible?: boolean;
+}> = ({cards, onDraw, visible}) => {
   return (
     <div>
       il y à { cards.length } cartes
-      <ul className="deck--deck__container">
+      {visible && <ul className="deck--deck__container">
         {
           take(5, cards).map((card) =>
             <li
@@ -23,7 +24,7 @@ const Deck: React.SFC<{
             </li>
           )
         }
-      </ul>
+      </ul>}
     </div>
   );
 };

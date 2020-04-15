@@ -5,21 +5,30 @@ import axios from 'axios';
 import Player from '../../models/Player';
 import { usePlayer } from '../../AuthProvider';
 import Deck from '../Deck';
-import Card from '../../models/Card';
+import CardType from '../../models/Card';
 import Board from '../Board';
+import Hand from '../Hand';
+
+import './styles.css';
 
 const BASE_URL = `http://${window.location.hostname}:1337`;
-const useSocket = (url) =>
-  useMemo(() => io(url), [url])
+const useSocket = (url) => useMemo(() => io(url), [url])
 
 type Room = {
+  id: number;
   identifiant: String;
   players: Player[];
   gamemaster: Player;
   started: boolean;
   cards: {
-    deck: Card[];
-    cemetery: Card[];
+    deck: CardType[];
+    cemetery: CardType[];
+  },
+  pawns: {
+    value: {
+      position: number,
+      color: string
+    }[]
   }
 }
 
@@ -50,14 +59,41 @@ const Room: React.SFC<{}> = props => {
     {
       room: undefined,
     }
-  )
+  );
+
+  const { room } = state;
+
+  const updatePawns = useCallback(async (pawns: any[]) => {
+    const newRoom = {
+      ...room,
+      pawns: {
+        value: pawns
+      }
+    };
+    dispatch({
+      type: 'UPDATE_ROOM',
+      payload: newRoom
+    });
+    const response = await axios.put(
+      `${BASE_URL}/rooms/${room.id}`,
+      newRoom,
+      {withCredentials: true}
+    );
+  }, [room]);
   
   useEffect(() => {
     console.log('tu dois pas voir trop ce message')
-    socket.on('connect', () => socket.emit('room', params.id));
+    socket.emit('room', params.id);
     socket.on('message', (message) => {
-      const json = JSON.parse(message)
-      console.log(json.payload.cards = JSON.parse(json.payload.cards))
+      const json = JSON.parse(message);
+      try {
+        json.payload.cards = JSON.parse(json.payload.cards);
+        json.payload.pawns = JSON.parse(json.payload.pawns);
+      } catch (error) {
+        console.log('quoi jsuis ivre');
+        console.error(error);
+      }
+      console.log('message', json);
       return dispatch(json);
     })
     axios.get(`${BASE_URL}/rooms/join/${params.id}`, {withCredentials: true})
@@ -80,9 +116,15 @@ const Room: React.SFC<{}> = props => {
     }
   }, [changeName]);
 
+  const drawCards = useCallback(async () => {
+    const response = await axios.get(`${BASE_URL}/rooms/draw/${state.room.id}/6`);
+    console.log(response);
+  }, [state.room]);
+
   return (
     <React.Fragment>
       <header className="App-header">
+        <button onClick={drawCards}>Tirer les cartes</button>
         <p>hello {
           player &&
             (editName ? <input disabled={ loading } onKeyDown={validateOnEnter} defaultValue={player.name} /> : <span onDoubleClick={onNameDoubleClick}>{player && player.name}</span>)
@@ -101,9 +143,11 @@ const Room: React.SFC<{}> = props => {
           </ul>
         )}
       </header>
-
       <div className="map-container">
-        {state.room && <Board players={state.room.players} />}
+        {state.room && <Board pawns={state.room.pawns.value} setPawns={updatePawns} />}
+      </div>
+      <div className="room__hand-container">
+        {player && player.cards && <Hand cards={player.cards} />}
       </div>
     </React.Fragment>
   );

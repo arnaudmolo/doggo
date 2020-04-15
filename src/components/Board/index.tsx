@@ -1,18 +1,13 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import MouseBackEnd from 'react-dnd-mouse-backend';
 import { useDrag, DndProvider, useDrop } from 'react-dnd';
-import { flatten, range, update } from 'ramda';
+import { update } from 'ramda';
 
 import Player from '../../models/Player';
 import data from './points';
 import './styles.css';
 
-type Props = {
-  players: Player[];
-};
-
 const POINT = 'POINT';
-const COLORS = ['blue', 'green', 'white', 'yellow', 'red', 'black'];
 
 const Point: React.SFC<{
   id: string;
@@ -75,7 +70,6 @@ const Drop: React.SFC<{
   );
 });
 
-const _points = flatten(COLORS.map((color, i) => range(i * 4, (i * 4) + 4).map(index => ({position: 96 + index, color: color}))));
 const margins = {
   left: 10,
   top: 10,
@@ -83,17 +77,33 @@ const margins = {
   bottom: 10,
 };
 
+type Pawn = {
+  position: number,
+  color: string
+};
+
+type Props = {
+  players?: Player[];
+  pawns: {
+    position: number,
+    color: string
+  }[];
+  setPawns: (pawns: any) => any;
+};
+
 const Board: React.SFC<Props> = props => {
+  const { pawns, setPawns } = props;
   const width = 1000;
   const height = 1000;
-  const [points, setPoints] = useState(_points);
   const onDrop = useCallback((pointDescription, newPosition) => {
-    setPoints(points => update(
-      points.indexOf(pointDescription.payload),
-      {...pointDescription.payload, position: newPosition},
-      points
-    ));
-  }, []);
+    setPawns(
+      update<any>(
+        pawns.indexOf(pointDescription.payload),
+        {...pointDescription.payload, position: newPosition},
+        pawns
+      ),
+    );
+  }, [pawns, setPawns]);
 
   return (
     <div>
@@ -114,11 +124,11 @@ const Board: React.SFC<Props> = props => {
             }, [onDrop])}
           </g>
           <g className="points">
-            {points.map((point, i) => {
-              const position = data[point.position];
-              const key = `${point.color}-${i}`;
+            {pawns.map((pawn, i) => {
+              const position = data[pawn.position];
+              const key = `${pawn.color}-${i}`;
               return (
-                <Point id={key} key={key} cx={position.cx} cy={position.cy} position={point} />
+                <Point id={key} key={key} cx={position.cx} cy={position.cy} position={pawn} />
               );
             })}
           </g>

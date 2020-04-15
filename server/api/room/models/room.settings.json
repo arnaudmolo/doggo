@@ -28,6 +28,9 @@
     },
     "cards": {
       "type": "json"
+    },
+    "pawns": {
+      "type": "json"
     }
   }
 }

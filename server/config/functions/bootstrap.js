@@ -15,7 +15,14 @@ module.exports = () => {
   io.on('connect', socket => {
     // listen for user diconnect
     socket.on('room', (room) => {
+      console.log('ca join moyen', room);
       socket.join(room);
+    });
+    socket.on('player', async playerId => {
+      const player = await strapi.services.player.update(
+        {id: playerId},
+        {socket: socket.id}
+      );
     });
   });
   strapi.io = io; // register socket io inside strapi main object to use it globally anywhere

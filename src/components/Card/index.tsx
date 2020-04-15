@@ -5,7 +5,7 @@ import back from './dos.png'
 
 type Props = {
   card: CardType;
-  hidden: boolean;
+  hidden?: boolean;
   onClick?: (Card) => any;
 }
 
@@ -18,6 +18,11 @@ export default ({onClick, card, hidden}: Props) => {
       </div>
     );
   } else {
-    return <div onClick={onCardClick} />;
+    // console.log('card', card);
+    return (
+      <div className="card visible-card" onClick={onCardClick}>
+        <p>{card.value} {card.family}</p>
+      </div>
+    );
   }
 };
