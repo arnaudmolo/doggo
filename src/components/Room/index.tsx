@@ -113,9 +113,24 @@ const Room: React.SFC<{}> = props => {
   }, [changeName]);
 
   const drawCards = useCallback(async () => {
-    const response = await axios.get(`/rooms/draw/${state.room.id}/2`);
+    const response = await axios.get(`/rooms/draw/${room.id}/2`);
     // console.log(response);
-  }, [state.room]);
+  }, [room]);
+
+  const onPlayCard = useCallback((card: CardType) => {
+    axios.put(`/rooms/${room.id}`, {
+      cards: {
+        deck: room.cards.deck,
+        cemetery: [...room.cards.cemetery, card]
+      }
+    })
+    axios.put(`/players/${player.id}`, {
+      cards: {
+        ...player.cards,
+        hand: player.cards.hand.filter(c => c.id !== card.id),
+      }
+    })
+  }, [room, player]);
 
   return (
     <React.Fragment>
@@ -144,7 +159,7 @@ const Room: React.SFC<{}> = props => {
       </div>
       <div className="room__hand-container">
         {state.room && player && player.cards && (
-          <Hand players={state.room.players.filter(p => p.id !== player.id)} />
+          <Hand players={state.room.players.filter(p => p.id !== player.id)} onDrawCard={onPlayCard} />
         )}
       </div>
     </React.Fragment>

@@ -117,11 +117,11 @@ const Board: React.SFC<Props> = props => {
       >
         <g>
           <g>
-            {useMemo(() => {
-              return data.map((polygon, index) => {
-                return <Drop onDrop={onDrop} key={index} polygon={polygon} />;
-              });
-            }, [onDrop])}
+            {useMemo(() => 
+              data.map((polygon, index) =>
+                <Drop onDrop={onDrop} key={index} polygon={polygon} />
+              )
+            , [onDrop])}
           </g>
           <g className="points">
             {pawns.map((pawn, i) => {

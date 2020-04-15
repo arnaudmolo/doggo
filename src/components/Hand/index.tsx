@@ -10,7 +10,8 @@ import { usePlayer } from '../../AuthProvider';
 const Hand: React.SFC<{
   onCardClick?: (card: CardType) => any;
   players: Player[];
-}> = ({onCardClick, players}) => {
+  onDrawCard?: (card: CardType) => any;
+}> = ({onCardClick, players, onDrawCard}) => {
 
   const [selectedCard, setSelectedCcard] = useState<CardType>(null);
 
@@ -73,7 +74,7 @@ const Hand: React.SFC<{
         >
           {card === selectedCard && (
             <div className="hand-container__choice-container">
-              <div className="choice-container__button__play choice-container__button">
+              <div onClick={() => onDrawCard(selectedCard)} className="choice-container__button__play choice-container__button">
                 <p>Play</p>
               </div>
               <Popup

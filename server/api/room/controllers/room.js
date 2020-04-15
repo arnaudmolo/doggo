@@ -27,11 +27,11 @@ const generateDeck = (deckId) => {
   return ['Hearts', 'Tiles', 'Clovers', 'Pikes'].reduce(
     (deck, family) => [
       ...deck,
-      ...range(1, 14).map(value => ({value, family, id: deckId})),
+      ...range(1, 14).map(value => ({value, family, id: generateUID()})),
     ]
     , [
-      {value: 14, family: 'black', id: deckId},
-      {value: 14, family: 'red', id: deckId}
+      {value: 14, family: 'black', id: generateUID()},
+      {value: 14, family: 'red', id: generateUID()}
     ]
   );
 };
