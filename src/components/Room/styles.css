@@ -4,3 +4,7 @@
   /* transform: translate(50%); */
   bottom: 0;
 }
+
+.room--board-container {
+  position: relative;
+}

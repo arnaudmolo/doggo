@@ -11,6 +11,7 @@ import Hand from '../Hand';
 
 import './styles.css';
 import { useSocket } from '../../SocketProvider';
+import Cemetery from '../Cemetery';
 
 type Room = {
   id: number;
@@ -123,13 +124,13 @@ const Room: React.SFC<{}> = props => {
         deck: room.cards.deck,
         cemetery: [...room.cards.cemetery, card]
       }
-    })
+    });
     axios.put(`/players/${player.id}`, {
       cards: {
         ...player.cards,
         hand: player.cards.hand.filter(c => c.id !== card.id),
       }
-    })
+    });
   }, [room, player]);
 
   return (
@@ -155,7 +156,12 @@ const Room: React.SFC<{}> = props => {
         )}
       </header>
       <div className="map-container">
-        {state.room && <Board pawns={state.room.pawns.value} setPawns={updatePawns} />}
+        {state.room && (
+          <div className="room--board-container">
+            <Cemetery cards={state.room.cards.cemetery} />
+            <Board pawns={state.room.pawns.value} setPawns={updatePawns} />
+          </div>
+        )}
       </div>
       <div className="room__hand-container">
         {state.room && player && player.cards && (
