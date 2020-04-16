@@ -96,7 +96,7 @@ const Hand: React.SFC<{
         </div>
       ))}
       {player.cards.gift && (
-        <div className="hand-container__card-container">
+        <div className="hand-container__card-container hand-container__card-container__gift">
           <div className="hand-container__choice-container">
             <div onClick={onAcceptGift} className="choice-container__button__play choice-container__button">
               <p>Accept</p>

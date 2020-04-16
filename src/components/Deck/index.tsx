@@ -1,18 +1,34 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { take } from 'ramda';
 import CardType from '../../models/Card';
 
 import Card from '../Card';
 import './styles.css';
 
+const Drawer: React.SFC<{
+  onDraw?: (nbCards: number) => any
+}> = ({onDraw}) => {
+  const [nbCards, setNbCards] = useState(6);
+  const onClick = useCallback(() => {
+    onDraw && onDraw(nbCards);
+  }, [onDraw, nbCards]);
+  return (
+    <div>
+      <input onChange={event => setNbCards(+event.target.value)} type={'number'} value={nbCards}></input>
+      <button onClick={onClick}>Draw</button>
+    </div>
+  );
+}
+
 const Deck: React.SFC<{
   cards: CardType[];
-  onDraw?: (card: CardType) => any;
+  onDraw?: (nbCards: number) => any
   visible?: boolean;
 }> = ({cards, onDraw, visible}) => {
   return (
     <div>
-      il y à { cards.length } cartes
+      <p>il y à { cards.length } cartes</p>
+      <Drawer onDraw={onDraw} />
       {visible && <ul className="deck--deck__container">
         {
           take(5, cards).map((card) =>

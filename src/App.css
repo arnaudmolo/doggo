@@ -19,7 +19,7 @@
 }
 
 .map-container {
-  width: 980px;
+  /* width: 980px; */
   height: 100vh;
   margin: auto;
   display: flex;

@@ -31,3 +31,7 @@
   height: 50px;
   background-color: red;
 }
+
+.hand-container__card-container__gift .choice-container__button {
+  opacity: 1;
+}

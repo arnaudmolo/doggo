@@ -1,16 +1,14 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import AxiosProvider from '../../AxiosProvider';
 
 const CreateRoom: React.SFC<{}> = props => {
   const history = useHistory();
   const onClick = React.useCallback(async () => {
     try {
-      const response = await fetch('//127.0.0.1:1337/rooms/', {
-        method: 'POST',
-        mode: 'cors'
-      });
-      const data = await response.json()
-      history.push(`/room/${data.identifiant}`)
+      const response = await AxiosProvider.post('/rooms/',);
+      const data = response.data;
+      history.push(`/room/${data.identifiant}`);
     } catch (error) {
       console.log(error)
     }

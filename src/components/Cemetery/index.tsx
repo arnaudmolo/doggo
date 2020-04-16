@@ -4,17 +4,17 @@ import CardType from '../../models/Card';
 import './styles.css';
 import Card from '../Card';
 import take from 'ramda/src/take';
+import { reverse } from 'ramda';
 
 const Cemetery: React.SFC<{
   cards: CardType[];
 }> = props => {
-  console.log(props.cards)
   return (
     <div
       className="cemetery-container"
     >
-      {take(5, props.cards).map(card =>
-        <div ref={console.log} key={card.id} className="cemetry--card__container">
+      {take(5, reverse(props.cards)).map(card =>
+        <div key={card.id} className="cemetry--card__container">
           <Card card={card} />
         </div>
       )}

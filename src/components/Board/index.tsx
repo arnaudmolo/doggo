@@ -14,6 +14,8 @@ const Point: React.SFC<{
   position: any;
   cx: number;
   cy: number;
+  xRatio: number;
+  yRatio: number;
 }> = React.memo((props) => {
   const { id } = props;
   const [collectedProps, drag] = useDrag({
@@ -22,11 +24,15 @@ const Point: React.SFC<{
       if (!monitor.isDragging()) {
         return
       }
-      return monitor.getDifferenceFromInitialOffset();
+      const position = monitor.getDifferenceFromInitialOffset();
+      return position && {
+        x: position.x * props.xRatio,
+        y: position.y * props.yRatio,
+      };
     },
   });
-  const x = collectedProps ? collectedProps.x + props.cx : props.cx;
-  const y = collectedProps ? collectedProps.y + props.cy : props.cy;
+  const x = collectedProps ? (collectedProps.x + props.cx) : props.cx;
+  const y = collectedProps ? (collectedProps.y + props.cy) : props.cy;
   return (
     <circle
       className={`point ${collectedProps && 'point-invisible'}`}
@@ -91,10 +97,18 @@ type Props = {
   setPawns: (pawns: any) => any;
 };
 
+const XVB = 1000;
+const YVB = 1000;
+
 const Board: React.SFC<Props> = props => {
   const { pawns, setPawns } = props;
-  const width = 1000;
-  const height = 1000;
+  const width = 500;
+  const height = 500;
+  const w = width + margins.left + margins.right;
+  const h = height + margins.top + margins.bottom;
+  const xRatio = XVB / width;
+  const yRatio = YVB / height;
+
   const onDrop = useCallback((pointDescription, newPosition) => {
     setPawns(
       update<any>(
@@ -107,12 +121,11 @@ const Board: React.SFC<Props> = props => {
 
   return (
     <svg
-      width={width + margins.left + margins.right}
-      height={height + margins.top + margins.bottom}
+      className="board--scene"
       version="1.1"
       x="0px"
       y="0px"
-      viewBox={`0 0 1000 1000`}
+      viewBox={`0 0 ${yRatio * h} ${xRatio * w}`}
     >
       <g>
         <g>
@@ -127,7 +140,15 @@ const Board: React.SFC<Props> = props => {
             const position = data[pawn.position];
             const key = `${pawn.color}-${i}`;
             return (
-              <Point id={key} key={key} cx={position.cx} cy={position.cy} position={pawn} />
+              <Point
+                key={key}
+                id={key}
+                cx={position.cx}
+                cy={position.cy}
+                position={pawn}
+                xRatio={xRatio}
+                yRatio={yRatio}
+              />
             );
           })}
         </g>

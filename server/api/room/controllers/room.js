@@ -54,27 +54,33 @@ module.exports = {
     return sanitizeEntity(entity, { model: strapi.models.room });
   },
   async draw (ctx) {
-    console.log('huuuu', ctx.params.id);
     let room = await strapi.services.room.findOne(
       {id: ctx.params.id}
     );
     // console.log('et bien', room);
     let deck = room.cards.deck;
+    let cemetery = room.cards.cemetery;
     const updatedPlayers = await Promise.all(room.players.map(
       async (player) => {
+        if (deck.length < +ctx.params.nb) {
+          deck = shuffleArray([...deck, ...cemetery]);
+          cemetery = [];
+          console.log('pas ici hein');
+        }
         const [start, end] = splitAt(ctx.params.nb, deck);
         deck = end;
-        if (player.socket) {
-          const socket = strapi.io.sockets.connected[player.socket];
-          if (socket) {
-            console.log('oui');
-            socket.emit(
-              'message',
-              JSON.stringify({type: 'UPDATE_PLAYER', payload: start})
-            );
-          }
-        }
-        // Si ca plante il fautre mettre cards.value
+        // if (player.socket) {
+        //   const socket = strapi.io.sockets.connected[player.socket];
+        //   if (socket) {
+        //     console.log('oui');
+        //     socket.emit(
+        //       'message',
+        //       JSON.stringify({type: 'UPDATE_PLAYER', payload: start})
+        //     );
+        //   }
+        // }
+        cemetery = [...cemetery, ...player.cards.hand];
+        console.log(start, end);
         return await strapi.services.player.update({
           id: player.id
         }, {
@@ -86,11 +92,10 @@ module.exports = {
       }
     ));
     // var clients = strapi.io.sockets.clients(room.identifiant); // all users from room `room`
-    console.log('draw', updatedPlayers, room.players);
     const newRoom = await strapi.services.room.update({id: room.id}, {
       cards: {
-        ...room.cards,
-        deck: deck,
+        deck,
+        cemetery
       }
     });
     return sanitizeEntity(newRoom, { model: strapi.models.room });

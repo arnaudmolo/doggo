@@ -1,6 +1,5 @@
 import React, { useReducer, useEffect, useMemo, useState, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import io from 'socket.io-client';
 import axios from '../../AxiosProvider';
 import Player from '../../models/Player';
 import { usePlayer } from '../../AuthProvider';
@@ -42,7 +41,7 @@ const Room: React.SFC<{}> = props => {
   const socket = useSocket();
   const history = useHistory();
 
-  const [state, dispatch] = useReducer<(state: State, action: any) => State >(
+  const [{room}, dispatch] = useReducer<(state: State, action: any) => State >(
     (state, action) => {
       switch (action.type) {
         case 'ROOM_UPDATE':
@@ -58,8 +57,6 @@ const Room: React.SFC<{}> = props => {
       room: undefined,
     }
   );
-
-  const { room } = state;
 
   const updatePawns = useCallback(async (pawns: any[]) => {
     const newRoom = {
@@ -113,8 +110,8 @@ const Room: React.SFC<{}> = props => {
     }
   }, [changeName]);
 
-  const drawCards = useCallback(async () => {
-    const response = await axios.get(`/rooms/draw/${room.id}/2`);
+  const drawCards = useCallback(async (nb) => {
+    const response = await axios.get(`/rooms/draw/${room.id}/${nb}`);
     // console.log(response);
   }, [room]);
 
@@ -136,18 +133,19 @@ const Room: React.SFC<{}> = props => {
   return (
     <React.Fragment>
       <header className="App-header">
-        <button onClick={drawCards}>Tirer les cartes</button>
+        {room && <Cemetery cards={room.cards.cemetery} />}
         <p>hello {
           player &&
             (editName ? <input disabled={ loading } onKeyDown={validateOnEnter} defaultValue={player.name} /> : <span onDoubleClick={onNameDoubleClick}>{player && player.name}</span>)
           }
         </p>
-        {state.room && <Deck
-          cards={ state.room.cards.deck }
+        {room && <Deck
+          cards={ room.cards.deck }
+          onDraw={ drawCards }
         />}
-        {state.room && (
+        {room && (
           <ul>
-            {state.room.players.map(player => (
+            {room.players.map(player => (
               <li key={player.id}>
                 <p><span>{player.name}</span></p>
               </li>
@@ -156,16 +154,15 @@ const Room: React.SFC<{}> = props => {
         )}
       </header>
       <div className="map-container">
-        {state.room && (
+        {room && (
           <div className="room--board-container">
-            <Cemetery cards={state.room.cards.cemetery} />
-            <Board pawns={state.room.pawns.value} setPawns={updatePawns} />
+            <Board pawns={room.pawns.value} setPawns={updatePawns} />
           </div>
         )}
       </div>
       <div className="room__hand-container">
-        {state.room && player && player.cards && (
-          <Hand players={state.room.players.filter(p => p.id !== player.id)} onDrawCard={onPlayCard} />
+        {room && player && player.cards && (
+          <Hand players={room.players.filter(p => p.id !== player.id)} onDrawCard={onPlayCard} />
         )}
       </div>
     </React.Fragment>
