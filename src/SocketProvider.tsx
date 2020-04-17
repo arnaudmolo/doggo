@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useMemo } from "react";
 import io from 'socket.io-client';
 
-const BASE_URL = process.env.NODE_ENV === 'production' ? '//doggo.molo.cool/api/' : `http://${window.location.hostname}:1337/`;
+const BASE_URL = process.env.NODE_ENV === 'production' ? '//api.molo.cool/' : `http://${window.location.hostname}:1337/`;
 
 export const Context = createContext(null);
 
