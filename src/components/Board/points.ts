@@ -144,6 +144,39 @@ const positionMatrice = [
     {cx: 524.87, cy: 86.11},
     {cx: 482.82, cy: 86.11},
     {cx: 441.43, cy: 86.11},
+  ],
+  [
+    {cx: 818, cy: 348.1, color: 'blue'},
+    {cx: 847, cy: 319.3, color: 'blue'},
+    {cx: 877, cy: 289.57, color: 'blue'},
+    {cx: 876, cy: 249.15, color: 'blue'},
+  ],
+  [
+    {cx: 822.27, cy: 647.86, color: 'green'},
+    {cx: 851.07, cy: 676.66, color: 'green'},
+    {cx: 880.8, cy: 706.39, color: 'green'},
+    {cx: 921.22, cy: 705.92, color: 'green'},
+  ],
+  [
+    {cx: 502.99, cy: 712.17, color: 'white'},
+    {cx: 502.99, cy: 752.9, color: 'white'},
+    {cx: 502.99, cy: 794.95, color: 'white'},
+    {cx: 531.89, cy: 823.2, color: 'white'},
+  ], [
+    {cx: 186.86, cy: 652.36, color: 'yellow'},
+    {cx: 158.06, cy: 681.16, color: 'yellow'},
+    {cx: 128.33, cy: 710.89, color: 'yellow'},
+    {cx: 128.79, cy: 751.31, color: 'yellow'},
+  ], [
+    {cx: 179.64, cy: 351.82, color: 'red'},
+    {cx: 150.84, cy: 323.02, color: 'red'},
+    {cx: 121.11, cy: 293.29, color: 'red'},
+    {cx: 80.69, cy: 293.75, color: 'red'},
+  ], [
+    {cx: 503.53, cy: 288.24, color: 'black'},
+    {cx: 503.53, cy: 247.51, color: 'black'},
+    {cx: 503.53, cy: 205.46, color: 'black'},
+    {cx: 474.62, cy: 177.21, color: 'black'},
   ]
 ];
 

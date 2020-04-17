@@ -1,55 +1,12 @@
-.st0 {
-  stroke:#1D71B8;
-  fill: burlywood;
-  stroke-width: 2px;
+
+.slot, .point {
+  transition: stroke-width 0.2s ease;
+  stroke-width: 0;
 }
-.st1 {
-  stroke:#4EAE33;
-  fill: burlywood;
-  stroke-width: 2px;
-}
-.st2 {
-  stroke:#F6F6F6;
-  fill: burlywood;
-  stroke-width: 2px;
-}
-.st3 {
-  stroke:#FCEA10;
-  fill: burlywood;
-  stroke-width: 2px;
-}
-.st4 {
-  stroke:#BE1622;
-  fill: burlywood;
-  stroke-width: 2px;
-}
-.st5 {
-  stroke:#010202;
-  fill: burlywood;
-  stroke-width: 2px;
-}
-.board-point.st0 {
-  fill:#1D71B8;
-}
-.board-point.st1 {
-  fill:#4EAE33;
-}
-.board-point.st2 {
-  fill:#F6F6F6;
-}
-.board-point.st3 {
-  fill:#FCEA10;
-}
-.board-point.st4 {
-  fill:#BE1622;
-}
-.board-point.st5 {
-  fill:#010202;
-}
+
 .slot {
-  fill: transparent;
-  stroke: black;
-  /* stroke-width: 1; */
+  fill: url(#creux);
+  stroke: rgba(0, 0, 0, 0.4);
 }
 
 .slot-hover {
@@ -57,12 +14,41 @@
   stroke: transparent;
 }
 
-.polygon-container:hover circle {
+.polygon-container:hover circle.slot, .point__container:hover .point {
   stroke-width: 3;
 }
 
-.point-invisible {
+.point__container-invisible {
   pointer-events: none;
+}
+
+.point__black {
+  fill: var(--black);
+  stroke: var(--black);
+}
+.point__blue {
+  fill: var(--blue);
+  stroke: var(--blue);
+}
+.point__green {
+  fill: var(--green);
+  stroke: var(--green);
+}
+.point__white {
+  fill: var(--white);
+  stroke: var(--white);
+}
+.point__yellow {
+  fill: var(--yellow);
+  stroke: var(--yellow);
+}
+.point__red {
+  fill: var(--red);
+  stroke: var(--red);
+}
+.point__shape {
+  fill: url(#boule);
+  stroke: url(#boule);
 }
 
 .board--scene {

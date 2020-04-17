@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useMemo, useState, useCallback } from 'react';
+import React, { useReducer, useEffect, useState, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import axios from '../../AxiosProvider';
 import Player from '../../models/Player';
@@ -7,10 +7,21 @@ import Deck from '../Deck';
 import CardType from '../../models/Card';
 import Board from '../Board';
 import Hand from '../Hand';
+import Popup from 'reactjs-popup';
 
 import './styles.css';
 import { useSocket } from '../../SocketProvider';
 import Cemetery from '../Cemetery';
+import AxiosProvider from '../../AxiosProvider';
+
+const COLORS = [
+  "black",
+  "blue",
+  "green",
+  "white",
+  "yellow",
+  "red",
+];
 
 type Room = {
   id: number;
@@ -40,8 +51,9 @@ const Room: React.SFC<{}> = props => {
   const params = useParams();
   const socket = useSocket();
   const history = useHistory();
+  const playerId = player && player.id;
 
-  const [{room}, dispatch] = useReducer<(state: State, action: any) => State >(
+  const [{room}, dispatch] = useReducer<(state: State, action: any) => State>(
     (state, action) => {
       switch (action.type) {
         case 'ROOM_UPDATE':
@@ -110,10 +122,9 @@ const Room: React.SFC<{}> = props => {
     }
   }, [changeName]);
 
-  const drawCards = useCallback(async (nb) => {
-    const response = await axios.get(`/rooms/draw/${room.id}/${nb}`);
-    // console.log(response);
-  }, [room]);
+  const drawCards = useCallback(async (nb) =>
+    axios.get(`/rooms/draw/${room.id}/${nb}`)
+  , [room]);
 
   const onPlayCard = useCallback((card: CardType) => {
     axios.put(`/rooms/${room.id}`, {
@@ -130,42 +141,75 @@ const Room: React.SFC<{}> = props => {
     });
   }, [room, player]);
 
+  const onColorClick = useCallback((color) => {
+    AxiosProvider.put(`/players/${playerId}`, {
+      color: color
+    });
+  }, [playerId]);
+
+  const takenColors = room ? room.players.reduce(
+    (colors, player) => player.color ? [...colors, player.color] : colors, []
+  ) : [];
+
   return (
-    <React.Fragment>
-      <header className="App-header">
+    <div className="room__container">
+      <div className="room__main">
+        {room && (
+          <Board pawns={room.pawns.value} setPawns={updatePawns} />
+        )}
+      </div>
+      <aside className="room__aside">
         {room && <Cemetery cards={room.cards.cemetery} />}
-        <p>hello {
+        <div>hello {
           player &&
-            (editName ? <input disabled={ loading } onKeyDown={validateOnEnter} defaultValue={player.name} /> : <span onDoubleClick={onNameDoubleClick}>{player && player.name}</span>)
+            (editName ?
+              <input
+                disabled={ loading }
+                onKeyDown={validateOnEnter}
+                defaultValue={player.name}
+              /> :
+              <Popup
+                trigger={<span onDoubleClick={onNameDoubleClick}>{player && player.name}</span>}
+              >
+                <div className="color-picker color-picker__container ">
+                  {COLORS.map(color => {
+                    const colorTaken = takenColors.includes(color);
+                    return (
+                      <div
+                        key={color}
+                        onClick={() => !colorTaken && onColorClick(color)}
+                        className={`color-picker__color color-picker__color__${color} ${colorTaken && 'color-picker__color__disable'}`}
+                      />
+                    );
+                  })}
+                </div>
+              </Popup>
+            )
           }
-        </p>
+        </div>
         {room && <Deck
           cards={ room.cards.deck }
           onDraw={ drawCards }
         />}
         {room && (
-          <ul>
-            {room.players.map(player => (
-              <li key={player.id}>
-                <p><span>{player.name}</span></p>
+          <ul className="player-list">
+            {room.players.sort((a, b) => b.cards.hand.length - a.cards.hand.length).map(player => (
+              <li className={`player-list__player player-list__player__${player.color}`} key={player.id}>
+                <p>
+                  <span>{player.name}</span>
+                  <span>({player.cards.hand.length})</span>
+                </p>
               </li>
             ))}
           </ul>
         )}
-      </header>
-      <div className="map-container">
-        {room && (
-          <div className="room--board-container">
-            <Board pawns={room.pawns.value} setPawns={updatePawns} />
-          </div>
-        )}
-      </div>
-      <div className="room__hand-container">
+      </aside>
+      <footer className="room__footer room__hand-container">
         {room && player && player.cards && (
           <Hand players={room.players.filter(p => p.id !== player.id)} onDrawCard={onPlayCard} />
         )}
-      </div>
-    </React.Fragment>
+      </footer>
+    </div>
   );
 }
 

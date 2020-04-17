@@ -14,7 +14,7 @@ const Drawer: React.SFC<{
   }, [onDraw, nbCards]);
   return (
     <div>
-      <input onChange={event => setNbCards(+event.target.value)} type={'number'} value={nbCards}></input>
+      <input min="1" max="6" onChange={event => setNbCards(+event.target.value)} type={'number'} value={nbCards}></input>
       <button onClick={onClick}>Draw</button>
     </div>
   );

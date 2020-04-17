@@ -1,9 +1,8 @@
 .cemetery-container {
   width: 150px;
-  height: 200px;
-  position: absolute;
-  left: 450px;
-  top: 360px;
+  height: 250px;
+  position: relative;
+  margin: 0 auto;
 }
 
 .cemetry--card__container {

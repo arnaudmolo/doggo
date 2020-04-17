@@ -21,6 +21,17 @@
     },
     "cards": {
       "type": "json"
+    },
+    "color": {
+      "type": "enumeration",
+      "enum": [
+        "black",
+        "blue",
+        "green",
+        "white",
+        "yellow",
+        "red"
+      ]
     }
   }
 }

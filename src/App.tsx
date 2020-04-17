@@ -13,11 +13,6 @@ import Room from './components/Room';
 import AuthProvider, { usePlayer } from './AuthProvider';
 
 const Home = () => {
-
-  const playerState = usePlayer();
-
-  console.log(playerState);
-
   return (
     <div>
       <Link to='/create'>Create a game</Link>
