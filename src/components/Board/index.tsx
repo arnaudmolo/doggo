@@ -112,7 +112,10 @@ const XVB = 980;
 const YVB = 980;
 
 const Board: React.SFC<Props> = React.memo(withResizeDetector(props => {
-  const { pawns, setPawns, width, height } = props;
+  const { pawns, setPawns } = props;
+  let { width, height } = props;
+  width = Math.min(width, 750);
+  height = Math.min(height, 750);
   // const width = 500;
   // const height = 500;
   const w = width + margins.left + margins.right;

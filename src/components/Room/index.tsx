@@ -221,15 +221,3 @@ const Room: React.SFC<{}> = props => {
 }
 
 export default Room;
-
-
-// <ul className="player-list">
-// {room.players.sort((a, b) => b.cards.hand.length - a.cards.hand.length).map(player => (
-//   <li className={`player-list__player player-list__player__${player.color}`} key={player.id}>
-//     <p>
-//       <span>{player.name}</span>
-//       <span>({player.cards.hand.length})</span>
-//     </p>
-//   </li>
-// ))}
-// </ul>
