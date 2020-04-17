@@ -81,4 +81,5 @@
 
 .board--scene {
   max-height: calc(100vh - 200px);
+  margin: auto;
 }

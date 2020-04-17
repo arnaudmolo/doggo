@@ -1,28 +1,33 @@
-import React from 'react';
+import React, { useCallback, memo } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  useHistory
 } from 'react-router-dom';
 
 import './App.css';
 import Map from './components/Map';
 import CreateRoom from './components/CreateRoom';
 import Room from './components/Room';
-import AuthProvider, { usePlayer } from './AuthProvider';
+import AuthProvider from './AuthProvider';
 
-const Home = () => {
+const Home = memo(() => {
+  const [roomId, setRoomId] = React.useState('');
+  const history = useHistory();
+  const onInputChange = useCallback((event) => setRoomId(event.target.value), []);
+  const onJoinClick = useCallback(() => history.push(`/room/${roomId}`), [history, roomId]);
   return (
     <div>
       <Link to='/create'>Create a game</Link>
       <form>
-        <input placeholder="Entrez le nom de la room" />
-        <button>Join</button>
+        <input value={ roomId } onChange={onInputChange} placeholder="Entrez le nom de la room" />
+        <button onClick={onJoinClick}>Join</button>
       </form>
     </div>
   );
-}
+});
 
 function App() {
   return (
@@ -51,7 +56,7 @@ function App() {
       </AuthProvider>
     </div>
   );
-}
+};
 
 export default App;
 
