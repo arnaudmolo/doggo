@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback } from 'react';
 import MouseBackEnd from 'react-dnd-mouse-backend';
 import { useDrag, DndProvider, useDrop } from 'react-dnd';
-import { update } from 'ramda';
+import { update, findIndex } from 'ramda';
 import { withResizeDetector } from 'react-resize-detector';
 
 import Player from '../../models/Player';
@@ -37,7 +37,7 @@ const Point: React.SFC<{
   return (
     <g
       className={`point__container point__container__${props.position.color}  ${collectedProps ? 'point__container-invisible' : ''}`}
-      transform={`translate(${x}, ${y})`}
+      transform={`translate(${x}, ${y}) ${collectedProps ? 'scale(1.5)' : ''}`}
       ref={drag}
     >
       <circle
@@ -68,11 +68,10 @@ const Drop: React.SFC<{
       onDrop && onDrop(pointDescription, polygon.position)
     , [onDrop, polygon.position])
   });
-
   return (
     <g className="polygon-container" transform={`translate(${polygon.cx}, ${polygon.cy})`}>
       <circle
-        className={`slot`}
+        className={`slot slot__${polygon.color}`}
         cx={0}
         cy={0}
         r="13.12"
@@ -109,8 +108,8 @@ type Props = {
   setPawns: (pawns: Pawn[]) => any;
 };
 
-const XVB = 1000;
-const YVB = 1000;
+const XVB = 980;
+const YVB = 980;
 
 const Board: React.SFC<Props> = React.memo(withResizeDetector(props => {
   const { pawns, setPawns, width, height } = props;
@@ -122,16 +121,15 @@ const Board: React.SFC<Props> = React.memo(withResizeDetector(props => {
   const yRatio = YVB / height;
 
   const onDrop = useCallback((pointDescription, newPosition) => {
+    console.log(newPosition)
     setPawns(
-      update<any>(
-        pawns.indexOf(pointDescription.payload),
+      update<Pawn[]>(
+        findIndex((p: Pawn) => pointDescription.payload.position === p.position, pawns),
         {...pointDescription.payload, position: newPosition},
         pawns
       ),
     );
   }, [pawns, setPawns]);
-
-  console.log('azdad');
 
   return (
     <svg
@@ -145,41 +143,41 @@ const Board: React.SFC<Props> = React.memo(withResizeDetector(props => {
     >
       <defs>
         <radialGradient
-            id={`creux`}
-            cx={0}
-            cy={0}
-            r="13.14"
-            gradientUnits="userSpaceOnUse"
-            fx={5}
-            fy={5}
-          >
-            <stop
-              offset="0"
-              stopColor='transparent'
-            />
-            <stop
-              offset="1"
-              stopColor='rgba(0, 0, 0, 0.2)'
-            />
-          </radialGradient>
-          <radialGradient
-              id={`boule`}
-              cx={0}
-              cy={0}
-              r="13.14"
-              gradientUnits="userSpaceOnUse"
-              fx={-5}
-              fy={-5}
-            >
-              <stop
-                offset="0"
-                stopColor='rgba(255, 255, 255, 0.4)'
-              />
-              <stop
-                offset="1"
-                stopColor='rgba(0, 0, 0, 0.2)'
-              />
-            </radialGradient>
+          id={`creux`}
+          cx={0}
+          cy={0}
+          r="13.14"
+          gradientUnits="userSpaceOnUse"
+          fx={5}
+          fy={5}
+        >
+          <stop
+            offset="0"
+            stopColor='transparent'
+          />
+          <stop
+            offset="1"
+            stopColor='rgba(0, 0, 0, 0.2)'
+          />
+        </radialGradient>
+        <radialGradient
+          id={`boule`}
+          cx={0}
+          cy={0}
+          r="13.14"
+          gradientUnits="userSpaceOnUse"
+          fx={-5}
+          fy={-5}
+        >
+          <stop
+            offset="0"
+            stopColor='rgba(255, 255, 255, 0.4)'
+          />
+          <stop
+            offset="1"
+            stopColor='rgba(0, 0, 0, 0.2)'
+          />
+        </radialGradient>
       </defs>
       <g>
         <g>

@@ -2,6 +2,11 @@ import React, { useState, useCallback } from 'react';
 import { take } from 'ramda';
 import CardType from '../../models/Card';
 
+import Input from '@material-ui/core/Input';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Button from '@material-ui/core/Button';
+
 import Card from '../Card';
 import './styles.css';
 
@@ -12,13 +17,28 @@ const Drawer: React.SFC<{
   const onClick = useCallback(() => {
     onDraw && onDraw(nbCards);
   }, [onDraw, nbCards]);
+
+  const onChange = useCallback((event) => {
+    setNbCards(event.target.value);
+  }, []);
+
   return (
-    <div>
-      <input min="1" max="6" onChange={event => setNbCards(+event.target.value)} type={'number'} value={nbCards}></input>
-      <button onClick={onClick}>Draw</button>
-    </div>
+    <FormControl>
+      <Input
+        type="number"
+        value={ nbCards }
+        onChange={ onChange }
+        inputProps={{
+          'aria-label': 'weight',
+          min: 1,
+          max: 6
+        }}
+      />
+      <FormHelperText id="standard-weight-helper-text">Cards</FormHelperText>
+      <Button onClick={ onClick } size="small" variant="outlined">Default</Button>
+    </FormControl>
   );
-}
+};
 
 const Deck: React.SFC<{
   cards: CardType[];

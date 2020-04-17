@@ -23,16 +23,12 @@
   background-color: var(--color1);
 }
 
-@media all and (min-width: 600px) {
-  .room__aside { flex: 1 0 0; }
-}
+.room__aside { flex: 1 0 0; }
 
-@media all and (min-width: 800px) {
-  .room__main    { flex: 3 0px; }
-  .room__aside { order: 1; } 
-  .room__main    { order: 2; }
-  .room__footer  { order: 4; }
-}
+.room__main { flex: 3 0px; }
+.room__aside { order: 1; } 
+.room__main { order: 2; }
+.room__footer { order: 4; }
 
 .color-picker__color {
   width: 33px;
@@ -65,22 +61,22 @@
 }
 
 .player-list__player__black {
-  color: var(--black);
+  background-color: var(--black);
 }
 .player-list__player__blue {
-  color: var(--blue);
+  background-color: var(--blue);
 }
 .player-list__player__green {
-  color: var(--green);
+  background-color: var(--green);
 }
 .player-list__player__white {
-  color: var(--white);
+  background-color: var(--white);
 }
 .player-list__player__yellow {
-  color: var(--yellow);
+  background-color: var(--yellow);
 }
 .player-list__player__red {
-  color: var(--red);
+  background-color: var(--red);
 }
 
 .color-picker {

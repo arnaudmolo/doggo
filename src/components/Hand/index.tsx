@@ -6,6 +6,16 @@ import './styles.css';
 import Player from '../../models/Player';
 import AxiosProvider from '../../AxiosProvider';
 import { usePlayer } from '../../AuthProvider';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+
+import { groupBy, findIndex } from 'ramda';
+
+const TEAMS = [['black', 'white'], ['blue', 'yellow'], ['red', 'green']];
+
+const findTeamateByColor = (players, player) => {
+  const nbTeam = TEAMS.findIndex(team => team.includes(player.color));
+  return players.find(p => TEAMS.findIndex(t => t.includes(p.color)) === nbTeam);
+}
 
 const Hand: React.SFC<{
   onCardClick?: (card: CardType) => any;
@@ -22,7 +32,8 @@ const Hand: React.SFC<{
 
   const {player} = usePlayer();
 
-  const onGiftClick = useCallback(async (teamate, selectedCard) => {
+  const onGiftClick = useCallback(async () => {
+    const teamate = findTeamateByColor(players, player);
     AxiosProvider.put(`/players/${teamate.id}`, {
       cards: {
         ...teamate.cards,
@@ -38,7 +49,7 @@ const Hand: React.SFC<{
         hand: player.cards.hand.filter(card => card !== selectedCard)
       }
     });
-  }, [player]);
+  }, [player, players, selectedCard]);
 
   const onDiscardGift = useCallback(() => {
     const teamate = players.find(p => p.id === player.cards.gift.from.id);
@@ -73,24 +84,16 @@ const Hand: React.SFC<{
           className="hand-container__card-container"
         >
           {card === selectedCard && (
-            <div className="hand-container__choice-container">
-              <div onClick={() => onDrawCard(selectedCard)} className="choice-container__button__play choice-container__button">
-                <p>Play</p>
+            <ClickAwayListener onClickAway={ () => setSelectedCcard(null)}>
+              <div className="hand-container__choice-container">
+                <div onClick={() => onDrawCard(selectedCard)} className="choice-container__button__play choice-container__button">
+                  <p>Play</p>
+                </div>
+                <div onClick={onGiftClick} className="choice-container__button__give choice-container__button">
+                  <p>Give</p>
+                </div>
               </div>
-              <Popup
-                trigger={
-                  <div className="choice-container__button__give choice-container__button">
-                    <p>Give</p>
-                  </div>
-                }
-                position="top center"
-                on="hover"
-              >
-                <ul>
-                  {players.map((player) => <button key={player.id} onClick={ () => onGiftClick(player, selectedCard) }>{player.name}</button>)}
-                </ul>
-              </Popup>
-            </div>
+            </ClickAwayListener>
           )}
           <Card card={card} onClick={onClick} />
         </div>

@@ -14,7 +14,11 @@
 
 .choice-container__button {
   width: 150px;
-  opacity: 0.3;
+  cursor: pointer;
+}
+
+.choice-container__button:hover {
+  box-shadow: 0 0 10px inset rgba(0, 0, 0, 0.3);
 }
 
 .hand-container p {
@@ -24,12 +28,14 @@
 
 .choice-container__button__play {
   height: 150px;
-  background-color: cadetblue;
+  background-color: var(--color2);
+  border-radius: 10px 10px 0 0;
 }
 
 .choice-container__button__give {
   height: 50px;
-  background-color: red;
+  background-color: var(--red);
+  border-radius: 0 0 10px 10px;
 }
 
 .hand-container__card-container__gift .choice-container__button {

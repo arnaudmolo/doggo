@@ -7,6 +7,30 @@
 .slot {
   fill: url(#creux);
   stroke: rgba(0, 0, 0, 0.4);
+  stroke-width: 1;
+}
+
+.slot__ {
+  stroke-width: 0;
+}
+
+.slot__black {
+  stroke: var(--black);
+}
+.slot__blue {
+  stroke: var(--blue);
+}
+.slot__green {
+  stroke: var(--green);
+}
+.slot__white {
+  stroke: var(--white);
+}
+.slot__yellow {
+  stroke: var(--yellow);
+}
+.slot__red {
+  stroke: var(--red);
 }
 
 .slot-hover {
@@ -14,8 +38,12 @@
   stroke: transparent;
 }
 
-.polygon-container:hover circle.slot, .point__container:hover .point {
+.point__container:hover .point {
   stroke-width: 3;
+}
+
+.polygon-container:hover circle.slot {
+  stroke-width: 15;
 }
 
 .point__container-invisible {

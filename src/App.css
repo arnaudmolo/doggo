@@ -5,6 +5,9 @@
   min-height: 100vh;
   display: flex;
   background-color: var(--color1);
+
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 .App-header {

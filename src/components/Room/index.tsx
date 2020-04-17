@@ -1,5 +1,10 @@
 import React, { useReducer, useEffect, useState, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+
 import axios from '../../AxiosProvider';
 import Player from '../../models/Player';
 import { usePlayer } from '../../AuthProvider';
@@ -78,7 +83,7 @@ const Room: React.SFC<{}> = props => {
       }
     };
     dispatch({
-      type: 'UPDATE_ROOM',
+      type: 'ROOM_UPDATE',
       payload: newRoom
     });
     await axios.put(
@@ -192,16 +197,18 @@ const Room: React.SFC<{}> = props => {
           onDraw={ drawCards }
         />}
         {room && (
-          <ul className="player-list">
-            {room.players.sort((a, b) => b.cards.hand.length - a.cards.hand.length).map(player => (
-              <li className={`player-list__player player-list__player__${player.color}`} key={player.id}>
-                <p>
-                  <span>{player.name}</span>
-                  <span>({player.cards.hand.length})</span>
-                </p>
-              </li>
-            ))}
-          </ul>
+          <div className={'player-liste'}>
+            <List dense>
+              {room.players.sort((a, b) => b.cards.hand.length - a.cards.hand.length).map(player => (
+                <ListItem key={player.id} className={`player-list__player player-list__player__${player.color}`}>
+                  <ListItemText
+                    primary={player.name}
+                    secondary={`${player.cards.hand.length} cards`}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </div>
         )}
       </aside>
       <footer className="room__footer room__hand-container">
@@ -214,3 +221,15 @@ const Room: React.SFC<{}> = props => {
 }
 
 export default Room;
+
+
+// <ul className="player-list">
+// {room.players.sort((a, b) => b.cards.hand.length - a.cards.hand.length).map(player => (
+//   <li className={`player-list__player player-list__player__${player.color}`} key={player.id}>
+//     <p>
+//       <span>{player.name}</span>
+//       <span>({player.cards.hand.length})</span>
+//     </p>
+//   </li>
+// ))}
+// </ul>

@@ -2,7 +2,7 @@ import flatten from "ramda/src/flatten";
 
 const positionMatrice = [
   [
-    {cx: 417.61, cy: 125.89},
+    {cx: 417.61, cy: 125.89, color: 'black'},
     {cx: 417.61, cy: 165.3},
     {cx: 417.61, cy: 204.72},
     {cx: 417.61, cy: 246.77},
@@ -20,7 +20,7 @@ const positionMatrice = [
     {cx: 43.48, cy: 272.03}
   ],
   [
-    {cx: 15.42, cy: 302.21},
+    {cx: 15.42, cy: 302.21, color: 'red'},
     {cx: 45.4, cy: 331.69},
     {cx: 73.51, cy: 359.32},
     {cx: 103.49, cy: 388.8},
@@ -38,7 +38,7 @@ const positionMatrice = [
     {cx: 102.03, cy: 786.56}
   ],
   [
-    {cx: 137.65, cy: 813.17},
+    {cx: 137.65, cy: 813.17, color: 'yellow'},
     {cx: 167.38, cy: 783.44},
     {cx: 195.25, cy: 755.56},
     {cx: 224.99, cy: 725.83},
@@ -56,7 +56,7 @@ const positionMatrice = [
     {cx: 544.38, cy: 876.38}
   ],
   [
-    {cx: 585.77, cy: 876.38},
+    {cx: 585.77, cy: 876.38, color: 'white'},
     {cx: 585.77, cy: 834.34},
     {cx: 585.77, cy: 794.92},
     {cx: 585.77, cy: 752.87},
@@ -74,7 +74,7 @@ const positionMatrice = [
     {cx: 959.89, cy: 727.61}
   ],
   [
-    {cx: 984.58, cy: 695.36},
+    {cx: 984.58, cy: 695.36, color: 'green'},
     {cx: 954.6, cy: 665.88},
     {cx: 926.49, cy: 638.25},
     {cx: 896.51, cy: 608.77},
@@ -92,7 +92,7 @@ const positionMatrice = [
     {cx: 897.97, cy: 211.01}
   ],
   [
-    {cx: 865.3, cy: 188.52},
+    {cx: 865.3, cy: 188.52, color: 'blue'},
     {cx: 835.56, cy: 218.25},
     {cx: 807.69, cy: 246.13},
     {cx: 777.96, cy: 275.86},
