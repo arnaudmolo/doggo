@@ -22,7 +22,7 @@
   },
   "cors": {
     "enabled": true,
-    "origin": "//doggo.molo.cool"
+    "origin": "https://api.molo.cool"
   },
   "ip": {
     "enabled": false,
