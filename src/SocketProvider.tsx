@@ -9,9 +9,9 @@ export const useSocket = () => useContext(Context);
 
 export default ({children}) => {
   const socket = useMemo(() => io(BASE_URL), []);
-  useEffect(() => {
-    socket.on('disconnect', () => socket.socket.connect());
-  });
+  // useEffect(() => {
+  //   socket.on('disconnect', () => socket.connect());
+  // });
   return (
     <Context.Provider value={socket}>
       {children}

@@ -175,7 +175,13 @@ const Room: React.SFC<{}> = props => {
         {room && (
           <div className={'player-liste'}>
             <List dense>
-              {room.players.sort((a, b) => b.cards.hand.length - a.cards.hand.length).map(listPlayer => (
+              {room.players.sort((a, b) => {
+                if (b.cards && a.cards) {
+                  return b.cards.hand.length - a.cards.hand.length
+                } else {
+                  return 0
+                }
+              }).map(listPlayer => (
                 <ListItem key={listPlayer.id} className={`player-list__player player-list__player__${listPlayer.color}`}>
                   <ListItemText
                     secondary={`${listPlayer.cards.hand.length} cards`}
