@@ -20,12 +20,12 @@ import Cemetery from '../Cemetery';
 import AxiosProvider from '../../AxiosProvider';
 
 const COLORS = [
-  "black",
-  "blue",
-  "green",
-  "white",
-  "yellow",
-  "red",
+  'black',
+  'blue',
+  'green',
+  'white',
+  'yellow',
+  'red',
 ];
 
 type Room = {

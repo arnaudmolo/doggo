@@ -52,10 +52,6 @@ module.exports = {
       type: 'ROOM_UPDATE',
       payload: sanitizeEntity(room, { model: strapi.models.room })
     };
-    console.log('c ici'.repeat(100));
-    console.log(updateToSend);
-    console.log('c ici'.repeat(100));
-    console.log('room.identifiant', room.identifiant)
     strapi.io.sockets.in(room.identifiant).emit('message', JSON.stringify(updateToSend));
 
     return sanitizeEntity(player, { model: strapi.models.player });

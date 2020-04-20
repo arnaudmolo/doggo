@@ -23,7 +23,7 @@ function shuffleArray (array) {
  * Read the documentation (https://strapi.io/documentation/3.0.0-beta.x/concepts/controllers.html#core-controllers)
  * to customize this controller
  */
-const generateDeck = (deckId) => {
+const generateDeck = () => {
   return ['Hearts', 'Tiles', 'Clovers', 'Pikes'].reduce(
     (deck, family) => [
       ...deck,
@@ -60,7 +60,7 @@ module.exports = {
     // console.log('et bien', room);
     let deck = room.cards.deck;
     let cemetery = room.cards.cemetery;
-    const updatedPlayers = await Promise.all(room.players.map(
+    await Promise.all(room.players.map(
       async (player) => {
         if (deck.length < +ctx.params.nb) {
           deck = shuffleArray([...deck, ...cemetery]);
@@ -80,7 +80,6 @@ module.exports = {
         //   }
         // }
         cemetery = [...cemetery, ...player.cards.hand];
-        console.log(start, end);
         return await strapi.services.player.update({
           id: player.id
         }, {

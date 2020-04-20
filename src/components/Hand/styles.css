@@ -13,7 +13,7 @@
 }
 
 .choice-container__button {
-  width: 150px;
+  width: 158px;
   cursor: pointer;
 }
 
@@ -27,7 +27,7 @@
 }
 
 .choice-container__button__play {
-  height: 150px;
+  height: 170px;
   background-color: var(--color2);
   border-radius: 10px 10px 0 0;
 }
