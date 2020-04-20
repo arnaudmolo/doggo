@@ -82,3 +82,11 @@
 .color-picker {
   display: flex;
 }
+
+
+
+@media only screen and (max-width: 800px) {
+  .room__footer {
+    order: 0;
+  }
+}
