@@ -5,6 +5,9 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
+import ColorLensIcon from '@material-ui/icons/ColorLens';
+import EditIcon from '@material-ui/icons/Edit';
+
 import axios from '../../AxiosProvider';
 import Player from '../../models/Player';
 import { usePlayer } from '../../AuthProvider';
@@ -165,33 +168,6 @@ const Room: React.SFC<{}> = props => {
       </div>
       <aside className="room__aside">
         {room && <Cemetery cards={room.cards.cemetery} />}
-        <div>hello {
-          player &&
-            (editName ?
-              <input
-                disabled={ loading }
-                onKeyDown={validateOnEnter}
-                defaultValue={player.name}
-              /> :
-              <Popup
-                trigger={<span onDoubleClick={onNameDoubleClick}>{player && player.name}</span>}
-              >
-                <div className="color-picker color-picker__container ">
-                  {COLORS.map(color => {
-                    const colorTaken = takenColors.includes(color);
-                    return (
-                      <div
-                        key={color}
-                        onClick={() => !colorTaken && onColorClick(color)}
-                        className={`color-picker__color color-picker__color__${color} ${colorTaken && 'color-picker__color__disable'}`}
-                      />
-                    );
-                  })}
-                </div>
-              </Popup>
-            )
-          }
-        </div>
         {room && <Deck
           cards={ room.cards.deck }
           onDraw={ drawCards }
@@ -199,12 +175,42 @@ const Room: React.SFC<{}> = props => {
         {room && (
           <div className={'player-liste'}>
             <List dense>
-              {room.players.sort((a, b) => b.cards.hand.length - a.cards.hand.length).map(player => (
-                <ListItem key={player.id} className={`player-list__player player-list__player__${player.color}`}>
+              {room.players.sort((a, b) => b.cards.hand.length - a.cards.hand.length).map(listPlayer => (
+                <ListItem key={listPlayer.id} className={`player-list__player player-list__player__${listPlayer.color}`}>
                   <ListItemText
-                    primary={player.name}
-                    secondary={`${player.cards.hand.length} cards`}
-                  />
+                    secondary={`${listPlayer.cards.hand.length} cards`}
+                  >
+                    <div>
+                      {player && listPlayer.id === player.id ? (
+                        <div>
+                          {editName ? (
+                            <input
+                              disabled={ loading }
+                              onKeyDown={validateOnEnter}
+                              defaultValue={player.name}
+                            /> 
+                          ) : listPlayer.name}
+                          <EditIcon fontSize="small" onClick={ onNameDoubleClick } />
+                          <Popup
+                            trigger={<span onDoubleClick={onNameDoubleClick}>{<ColorLensIcon fontSize="small" />}</span>}
+                          >
+                            <div className="color-picker color-picker__container ">
+                              {COLORS.map(color => {
+                                const colorTaken = takenColors.includes(color);
+                                return (
+                                  <div
+                                    key={color}
+                                    onClick={() => !colorTaken && onColorClick(color)}
+                                    className={`color-picker__color color-picker__color__${color} ${colorTaken && 'color-picker__color__disable'}`}
+                                  />
+                                );
+                              })}
+                            </div>
+                          </Popup>
+                        </div>
+                      ) : listPlayer.name}
+                    </div>
+                  </ListItemText>
                 </ListItem>
               ))}
             </List>

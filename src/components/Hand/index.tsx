@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import Popup from 'reactjs-popup';
 import CardType from '../../models/Card';
 import Card from '../Card';
 import './styles.css';
@@ -7,8 +6,6 @@ import Player from '../../models/Player';
 import AxiosProvider from '../../AxiosProvider';
 import { usePlayer } from '../../AuthProvider';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-
-import { groupBy, findIndex } from 'ramda';
 
 const TEAMS = [['black', 'white'], ['blue', 'yellow'], ['red', 'green']];
 
@@ -83,7 +80,7 @@ const Hand: React.SFC<{
           key={`${card.value}-${card.family}-${card.id}`}
           className="hand-container__card-container"
         >
-          {card === selectedCard && (
+          {card === selectedCard && player.color && (
             <ClickAwayListener onClickAway={ () => setSelectedCcard(null)}>
               <div className="hand-container__choice-container">
                 <div onClick={() => onDrawCard(selectedCard)} className="choice-container__button__play choice-container__button">
